@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace UI.Window.StaticData
 {
-    [CreateAssetMenu(fileName = "WindowConfig", menuName = "Fear Of Height/Window")]
+    [CreateAssetMenu(fileName = "WindowConfig", menuName = "Bubble Fall/Window")]
     public class WindowConfig : ScriptableObject
     {
-        [SerializeField] private List<WindowStaticData> _windows;
+        [SerializeField] private List<WindowConfigData> _windows;
 
-        public List<WindowStaticData> Windows => _windows;
+        public List<WindowConfigData> Windows => _windows;
     }
 }

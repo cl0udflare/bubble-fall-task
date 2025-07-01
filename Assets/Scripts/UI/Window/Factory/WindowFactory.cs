@@ -27,7 +27,7 @@ namespace UI.Window.Factory
 
         private async UniTask<WindowBase> CreateWindow(WindowType type)
         {
-            WindowStaticData windowData = _staticDataService.GetWindow(type);
+            WindowConfigData windowData = _staticDataService.GetWindow(type);
             
             WindowBase[] instance = await Object.InstantiateAsync(windowData.Prefab, _windowRoot).ToUniTask();
             WindowBase window = instance[0];

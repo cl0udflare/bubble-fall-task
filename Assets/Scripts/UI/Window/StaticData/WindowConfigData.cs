@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UI.Window.StaticData
 {
     [Serializable]
-    public class WindowStaticData
+    public class WindowConfigData
     {
         [SerializeField] private WindowType _type;
         [SerializeField] private WindowBase _prefab;

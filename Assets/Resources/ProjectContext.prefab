@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 917456322687576420}
   - component: {fileID: 2260369787435038592}
   m_Layer: 0
-  m_Name: MainInstaller
+  m_Name: BootstrapInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

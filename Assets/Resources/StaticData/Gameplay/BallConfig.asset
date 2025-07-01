@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d0f1f9e37b4616936dfbfb4f5df852, type: 3}
+  m_Name: BallConfig
+  m_EditorClassIdentifier: 
+  _ballPrefab: {fileID: 1837520500574202078, guid: a96ebad5875101b45a883e5d4775b856, type: 3}

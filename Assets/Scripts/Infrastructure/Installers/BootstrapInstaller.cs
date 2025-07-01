@@ -1,5 +1,9 @@
-﻿using Gameplay.ObjectPools.Factory;
+﻿using Gameplay.Core.Ball;
+using Gameplay.Core.Ball.Factory;
+using Gameplay.ObjectPools.Factory;
+using Gameplay.Services.Randoms;
 using Gameplay.Services.StaticData;
+using Gameplay.Services.Systems;
 using Infrastructure.Bootstrapper;
 using Infrastructure.Services.AssetManagement;
 using Infrastructure.Services.Loading;
@@ -12,12 +16,16 @@ using Zenject;
 
 namespace Infrastructure.Installers
 {
-    public class MainInstaller : MonoInstaller, IInitializable
+    public class BootstrapInstaller : MonoInstaller, IInitializable
     {
         public override void InstallBindings()
         {
-            BindServices();
-            BindFactories();
+            BindInfrastructureServices();
+           
+            BindGameplayServices();
+            BindGameplayFactories();
+           
+            BindUIFactories();
 
             StateMachineInstaller.Install(Container);
             MediatorInstaller.Install(Container);
@@ -27,23 +35,34 @@ namespace Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<GameBootstrapper>().AsSingle().NonLazy(); // Bootstrap
         }
 
-        private void BindServices()
+        private void BindInfrastructureServices()
         {
             Container.BindInterfacesAndSelfTo<CurtainService>().FromComponentsInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<LoaderService>().AsSingle();
             Container.Bind<IProgressService>().To<ProgressService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProgressStorage>().AsSingle();
-            Container.BindInterfacesAndSelfTo<StaticDataService>().AsSingle();
             Container.Bind<ISceneLoaderService>().To<SceneLoaderService>().AsSingle();
         }
 
-        private void BindFactories()
+        private void BindGameplayServices()
+        {
+            Container.BindInterfacesAndSelfTo<StaticDataService>().AsSingle();
+            Container.Bind<ISystemFactory>().To<SystemFactory>().AsSingle();
+            Container.Bind<IRandomService>().To<RandomService>().AsSingle();
+        }
+
+        private void BindGameplayFactories()
         {
             Container.Bind<IObjectPoolFactory>().To<ObjectPoolFactory>().AsSingle();
+            Container.Bind<IBallFactory>().To<BallFactory>().AsSingle();
+        }
+
+        private void BindUIFactories()
+        {
             Container.Bind<IWindowFactory>().To<WindowFactory>().AsSingle();
         }
 
         public void Initialize() => 
-            Application.targetFrameRate = 90;
+            Application.targetFrameRate = 60;
     }
 }

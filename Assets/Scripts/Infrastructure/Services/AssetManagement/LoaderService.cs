@@ -20,7 +20,7 @@ namespace Infrastructure.Services.AssetManagement
             T asset = request.asset as T;
             if (!asset)
             {
-                DebugLogger.LogError($"Asset at path '{path}' is not a T object.");
+                DebugLogger.LogError($"Asset at path '{path}' is not a {typeof(T)} object.");
                 return null;
             }
 
