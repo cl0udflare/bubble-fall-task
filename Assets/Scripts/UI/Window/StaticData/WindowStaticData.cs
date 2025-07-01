@@ -1,0 +1,15 @@
+﻿using System;
+using UnityEngine;
+
+namespace UI.Window.StaticData
+{
+    [Serializable]
+    public class WindowStaticData
+    {
+        [SerializeField] private WindowType _type;
+        [SerializeField] private WindowBase _prefab;
+
+        public WindowType Type => _type;
+        public WindowBase Prefab => _prefab;
+    }
+}
