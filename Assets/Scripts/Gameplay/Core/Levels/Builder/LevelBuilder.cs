@@ -5,6 +5,7 @@ using Gameplay.Core.Ball.Factory;
 using Gameplay.Core.Levels.SpawnStrategies;
 using Gameplay.Core.Ball.StaticData;
 using Gameplay.Core.Board;
+using Gameplay.Services.Randoms;
 using Logging;
 using UnityEngine;
 
@@ -13,19 +14,24 @@ namespace Gameplay.Core.Levels.Builder
     public class LevelBuilder
     {
         private readonly IBallFactory _ballFactory;
+        private readonly IRandomService _randomService;
 
         private BallConfig _ballConfig;
         private IBallSpawnStrategy _spawnStrategy;
         private IBoardSystem _boardSystem;
 
-        public LevelBuilder(IBallFactory ballFactory) =>
+        public LevelBuilder(IBallFactory ballFactory, IRandomService randomService)
+        {
             _ballFactory = ballFactory;
+            _randomService = randomService;
+        }
 
-        public void Initialize(BallConfig ballConfig, IBoardSystem boardSystem, IBallSpawnStrategy spawnStrategy)
+        public void Initialize(BallConfig ballConfig, IBoardSystem boardSystem)
         {
             _ballConfig = ballConfig;
             _boardSystem = boardSystem;
-            _spawnStrategy = spawnStrategy;
+            
+            _spawnStrategy = new WaveBallSpawnStrategy(_randomService);
         }
 
         public void Build()

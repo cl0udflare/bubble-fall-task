@@ -1,11 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
-using Gameplay.Core.Ball;
 using Gameplay.Core.Ball.StaticData;
 using Gameplay.Core.Board;
 using Gameplay.Core.Board.StaticData;
-using Gameplay.Core.Levels;
 using Gameplay.Core.Levels.Builder;
-using Gameplay.Core.Levels.SpawnStrategies;
 using Gameplay.Core.Levels.StaticData;
 using Gameplay.Services.StaticData;
 using Gameplay.Services.Systems;
@@ -60,10 +57,9 @@ namespace Infrastructure.States.GameStates
         private LevelBuilder CreateLevelBuilder(IBoardSystem boardSystem)
         {
             BallConfig ballConfig = _staticData.BallConfig;
-            IBallSpawnStrategy spawnStrategy = _systemFactory.Create<WaveBallSpawnStrategy>();
             LevelBuilder builder = _systemFactory.Create<LevelBuilder>();
            
-            builder.Initialize(ballConfig, boardSystem, spawnStrategy);
+            builder.Initialize(ballConfig, boardSystem);
             builder.Build();
             
             return builder;
