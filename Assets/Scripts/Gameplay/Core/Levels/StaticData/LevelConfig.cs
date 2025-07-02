@@ -8,7 +8,10 @@ namespace Gameplay.Core.Levels.StaticData
     {
         [Header("Board Settings")]
         [SerializeField] private BoardConfig _boardConfig;
+        [Space]
+        [SerializeField] private int _minMatchGroupSize = 3; 
         
         public BoardConfig BoardConfig => _boardConfig;
+        public int MinMatchGroupSize => _minMatchGroupSize;
     }
 }

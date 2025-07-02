@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gameplay.Core.Ball;
+using Gameplay.Core.Ball.Data;
 using Gameplay.Core.Board.Data;
 using Gameplay.Core.Board.StaticData;
 using UnityEngine;
@@ -19,5 +20,6 @@ namespace Gameplay.Core.Board
         Vector3 CellToWorld(Vector2Int gridPosition);
         Vector3[] GetCellCorners(Vector2Int gridPosition);
         IEnumerable<Vector2Int> GetNeighbors(Vector2Int position);
+        List<Vector2Int> FindMatchingGroup(Vector2Int start, BallColor color);
     }
 }

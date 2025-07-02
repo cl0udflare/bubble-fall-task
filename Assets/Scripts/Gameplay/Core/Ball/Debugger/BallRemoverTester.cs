@@ -11,20 +11,12 @@ namespace Gameplay.Core.Ball.Debugger
         [SerializeField] private Camera _camera;
         [SerializeField] private LayerMask _ballLayer;
         [SerializeField] private float _gizmoLength = 100f;
-        
-        private BallPhysicsSystem _ballPhysicsSystem; 
+
+        private BallPhysicsSystem _ballPhysicsSystem;
         private IBoardSystem _boardSystem;
 
         private Vector3 _lastRayHit = Vector3.zero;
         private bool _hasHit = false;
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-                TryRemoveBallAtMouse();
-
-            UpdateRaycastPreview();
-        }
 
         public void CreatePhysicsSystem(IBoardSystem boardSystem)
         {
@@ -32,13 +24,23 @@ namespace Gameplay.Core.Ball.Debugger
             _ballPhysicsSystem = new BallPhysicsSystem(boardSystem);
         }
 
-        private void TryRemoveBallAtMouse()
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+                TryRemoveBallGroupAtMouse();
+
+            UpdateRaycastPreview();
+        }
+
+        private void TryRemoveBallGroupAtMouse()
         {
             BallView ballView = RaycastBallUnderMouse();
-            if (ballView == null) return;
+            if (ballView == null)
+                return;
 
             Vector2Int? gridPosition = FindGridPositionForBall(ballView);
-            if (gridPosition.HasValue) RemoveBall(gridPosition.Value);
+            if (gridPosition.HasValue)
+                TryRemoveBallGroup(gridPosition.Value);
         }
 
         private BallView RaycastBallUnderMouse()
@@ -54,7 +56,6 @@ namespace Gameplay.Core.Ball.Debugger
             }
 
             _lastRayHit = ray.origin + ray.direction * _gizmoLength;
-            print("BallView is null!");
             return null;
         }
 
@@ -75,21 +76,34 @@ namespace Gameplay.Core.Ball.Debugger
 
         private Vector2Int? FindGridPositionForBall(BallView ballView)
         {
-            foreach (KeyValuePair<Vector2Int, BoardData> cells in _boardSystem.GetOccupiedCells())
+            foreach (KeyValuePair<Vector2Int, BoardData> cellPair in _boardSystem.GetOccupiedCells())
             {
-                BoardData cell = cells.Value;
+                BoardData cell = cellPair.Value;
                 if (cell != null && cell.View == ballView)
-                    return cells.Key;
+                    return cellPair.Key;
             }
             return null;
         }
 
-        private void RemoveBall(Vector2Int gridPosition)
+        private void TryRemoveBallGroup(Vector2Int startPosition)
         {
-            if (_boardSystem.TryRemoveCellData(gridPosition, out BallView ballView))
+            BoardData startCell = _boardSystem.GetCell(startPosition);
+            if (startCell == null || !startCell.IsOccupied)
+                return;
+
+            int minGroup = 3;
+            List<Vector2Int> group = _boardSystem.FindMatchingGroup(startPosition, startCell.Color);
+
+            if (group.Count < minGroup)
             {
-                print("Ball remove!");
-                Destroy(ballView.gameObject);
+                Debug.Log($"Not enough balls to remove! Group size: {group.Count}");
+                return;
+            }
+
+            foreach (Vector2Int position in group)
+            {
+                if (_boardSystem.TryRemoveCellData(position, out BallView ballView) && ballView != null)
+                    Destroy(ballView.gameObject);
             }
 
             DropDisconnectedBalls();
@@ -97,10 +111,10 @@ namespace Gameplay.Core.Ball.Debugger
 
         private void DropDisconnectedBalls()
         {
-            foreach (Vector2Int pos in _ballPhysicsSystem.GetDisconnectedBalls())
+            foreach (Vector2Int position in _ballPhysicsSystem.GetDisconnectedBalls())
             {
-                BoardData cell = _boardSystem.GetCell(pos);
-                if (cell is { IsOccupied: true }) 
+                BoardData cell = _boardSystem.GetCell(position);
+                if (cell is { IsOccupied: true })
                     cell.View.BallPhysics.StartFalling();
             }
         }

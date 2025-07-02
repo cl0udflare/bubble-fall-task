@@ -469,10 +469,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 330585545}
-  _boardDebugger: {fileID: 511254892}
   _ballLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  _gizmoLength: 100
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
