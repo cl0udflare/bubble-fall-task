@@ -1,6 +1,7 @@
 ﻿using Gameplay.Core.Ball;
 using Gameplay.Core.Ball.Factory;
 using Gameplay.ObjectPools.Factory;
+using Gameplay.Services.Inputs;
 using Gameplay.Services.Randoms;
 using Gameplay.Services.StaticData;
 using Gameplay.Services.Systems;
@@ -49,6 +50,7 @@ namespace Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<StaticDataService>().AsSingle();
             Container.Bind<ISystemFactory>().To<SystemFactory>().AsSingle();
             Container.Bind<IRandomService>().To<RandomService>().AsSingle();
+            Container.BindInterfacesTo<InputService>().AsSingle();
         }
 
         private void BindGameplayFactories()
