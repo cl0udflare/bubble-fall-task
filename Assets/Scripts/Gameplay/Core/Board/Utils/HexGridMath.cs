@@ -4,6 +4,9 @@ namespace Gameplay.Core.Board.Utils
 {
     public static class HexGridMath
     {
+        /// <summary>
+        /// Перетворює гекс-координати (axial: q, r) у світові координати (Vector3).
+        /// </summary>
         public static Vector3 AxialToWorld(Vector2Int axial, float cellSize)
         {
             int q = axial.x;
@@ -13,6 +16,9 @@ namespace Gameplay.Core.Board.Utils
             return new Vector3(x, 0f, -z);
         }
 
+        /// <summary>
+        /// Обчислює позиції 6-ти кутів гексагона навколо центра з заданим розміром клітинки.
+        /// </summary>
         public static Vector3[] GetHexCorners(Vector3 center, float cellSize)
         {
             float radius = cellSize * 0.5f;
@@ -30,12 +36,14 @@ namespace Gameplay.Core.Board.Utils
             return corners;
         }
         
+        /// <summary>
+        /// Конвертує зміщені координати сітки (offset: col, row) у axial-координати (q, r).
+        /// </summary>
         public static Vector2Int OffsetToAxial(int col, int row)
         {
             int q = col - (row - (row & 1)) / 2;
             int r = row;
             return new Vector2Int(q, r);
         }
-
     }
 }

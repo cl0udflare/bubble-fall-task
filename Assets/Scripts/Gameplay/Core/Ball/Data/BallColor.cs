@@ -2,11 +2,12 @@
 {
     public enum BallColor
     {
-        Red = 0,
-        Green = 1,
-        Blue = 2,
-        Yellow = 3,
-        Purple = 4,
-        Orange = 5
+        Unknown = 0,
+        Red = 1,
+        Green = 2,
+        Blue = 3,
+        Yellow = 4,
+        Purple = 5,
+        Orange = 6
     }
 }

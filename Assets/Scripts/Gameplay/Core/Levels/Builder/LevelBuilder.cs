@@ -5,13 +5,14 @@ using Gameplay.Core.Ball.Factory;
 using Gameplay.Core.Levels.SpawnStrategies;
 using Gameplay.Core.Ball.StaticData;
 using Gameplay.Core.Board;
+using Gameplay.Core.Board.Data;
 using Gameplay.Services.Randoms;
 using Logging;
 using UnityEngine;
 
 namespace Gameplay.Core.Levels.Builder
 {
-    public class LevelBuilder
+    public class LevelBuilder : ILevelBuilder
     {
         private readonly IBallFactory _ballFactory;
         private readonly IRandomService _randomService;
@@ -36,15 +37,18 @@ namespace Gameplay.Core.Levels.Builder
 
         public void Build()
         {
-            IEnumerable<Vector2Int> layout = _boardSystem.GetAllCells();
+            IEnumerable<Vector2Int> layout = _boardSystem.GetCells().Keys;
             List<BallData> ballsToSpawn = _spawnStrategy.GenerateBalls(layout);
 
             foreach (BallData ballData in ballsToSpawn)
             {
-                if (_boardSystem.TryAddBall(ballData.GridPosition, ballData.Color))
+                if (_boardSystem.TryAddCellData(ballData.GridPosition, out BoardData boardData))
                 {
-                    Vector3 worldPosition = _boardSystem.GridToWorld(ballData.GridPosition);
-                    _ballFactory.CreateBall(_ballConfig, worldPosition, ballData.Color);
+                    Vector3 worldPosition = _boardSystem.CellToWorld(ballData.GridPosition);
+                    BallView ball = _ballFactory.CreateBall(_ballConfig, worldPosition, ballData.Color);
+                    
+                    boardData.View = ball;
+                    boardData.Color = ballData.Color;
                 }
                 else
                 {

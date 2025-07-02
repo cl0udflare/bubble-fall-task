@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gameplay.Core.Ball.Data;
+using Gameplay.Core.Ball;
 using Gameplay.Core.Board.Data;
 using Gameplay.Core.Board.GridStrategies;
 using Gameplay.Core.Board.StaticData;
@@ -10,45 +10,56 @@ namespace Gameplay.Core.Board
 {
     public class BoardSystem : IBoardSystem
     {
-        private IGridStrategy _grid;
-        private float _cellSize;
         private BoardConfig _config;
+        private IGridStrategy _grid;
+        
+        public BoardConfig Config => _config;
 
         public void Initialize(BoardConfig config)
         {
             _config = config;
-            _cellSize = config.CellSize;
-
             CreateGridStrategy(config);
         }
+        
+        public bool TryAddCellData(Vector2Int cellPosition, out BoardData cellData)
+            => _grid.TryAddCellData(cellPosition, out cellData);
 
-        public BoardConfig GetBoardConfig() => _config;
+        public bool TryRemoveCellData(Vector2Int gridPosition, out BallView ballView)
+            => _grid.TryRemoveCellData(gridPosition, out ballView);
 
-        public bool TryAddBall(Vector2Int gridPosition, BallColor color)
-            => _grid.TryAddCell(gridPosition, color);
+        public BoardData GetCell(Vector2Int gridPosition)
+            => _grid.Cells.GetValueOrDefault(gridPosition);
+        
+        public Dictionary<Vector2Int, BoardData> GetCells()
+            => _grid.Cells;
+        
+        public Dictionary<Vector2Int, BoardData> GetOccupiedCells()
+            => _grid.GetOccupiedCells();
 
-        public bool RemoveBall(Vector2Int gridPosition)
-            => _grid.RemoveCell(gridPosition);
-
-        public BoardBallData GetCell(Vector2Int gridPosition)
-            => _grid.GetCell(gridPosition);
-
-        public IEnumerable<Vector2Int> GetAllCells()
-            => _grid.AllCells();
-
-        public Vector3 GridToWorld(Vector2Int gridPosition)
-            => _grid.GridToWorld(gridPosition, _cellSize);
+        public Vector3 CellToWorld(Vector2Int gridPosition)
+            => _grid.CellToWorld(gridPosition);
 
         public Vector3[] GetCellCorners(Vector2Int gridPosition)
-            => _grid.GetCell(gridPosition, _cellSize);
+            => _grid.GetCellCorners(gridPosition);
+
+        public IEnumerable<Vector2Int> GetNeighbors(Vector2Int position) => 
+            _grid.GetNeighbors(position);
+
+        public void Dispose()
+        {
+            _grid.Dispose();
+            _config = null;
+        }
 
         private void CreateGridStrategy(BoardConfig config)
         {
             _grid = config.GridType switch
             {
-                GridType.Hex => new HexRectangularGridStrategy(config.Rows, config.Columns),
+                GridType.Hex => new HexRectangularGridStrategy(config.Rows, config.Columns, config.CellSize),
                 _ => throw new ArgumentOutOfRangeException()
             };
+            
+            _grid.GenerateCells();
         }
     }
 }

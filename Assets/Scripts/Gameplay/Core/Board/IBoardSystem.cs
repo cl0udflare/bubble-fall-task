@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
-using Gameplay.Core.Ball.Data;
+﻿using System;
+using System.Collections.Generic;
+using Gameplay.Core.Ball;
 using Gameplay.Core.Board.Data;
 using Gameplay.Core.Board.StaticData;
 using UnityEngine;
 
 namespace Gameplay.Core.Board
 {
-    public interface IBoardSystem
+    public interface IBoardSystem : IDisposable
     {
+        BoardConfig Config { get; }
         void Initialize(BoardConfig config);
-        BoardConfig GetBoardConfig();
-        bool TryAddBall(Vector2Int gridPosition, BallColor color);
-        bool RemoveBall(Vector2Int gridPosition);
-        BoardBallData GetCell(Vector2Int gridPosition);
-        IEnumerable<Vector2Int> GetAllCells();
-        Vector3 GridToWorld(Vector2Int gridPosition);
+        bool TryAddCellData(Vector2Int cellPosition, out BoardData cellData);
+        bool TryRemoveCellData(Vector2Int gridPosition, out BallView ballView);
+        BoardData GetCell(Vector2Int gridPosition);
+        Dictionary<Vector2Int, BoardData> GetCells();
+        Dictionary<Vector2Int, BoardData> GetOccupiedCells();
+        Vector3 CellToWorld(Vector2Int gridPosition);
         Vector3[] GetCellCorners(Vector2Int gridPosition);
+        IEnumerable<Vector2Int> GetNeighbors(Vector2Int position);
     }
 }

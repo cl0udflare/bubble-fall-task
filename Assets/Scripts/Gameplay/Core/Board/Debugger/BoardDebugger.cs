@@ -13,25 +13,25 @@ namespace Gameplay.Core.Board.Debugger
         [Header("Settings")]
         [SerializeField] private bool _isDrawCellPosition;
 
-        private BoardSystem _boardSystem;
+        public BoardSystem BoardSystem { get; private set; }
 
         private void OnEnable()
         {
-            _boardSystem = new BoardSystem();
-            _boardSystem.Initialize(_config);
+            BoardSystem = new BoardSystem();
+            BoardSystem.Initialize(_config);
         }
 
-        private void OnDisable() => _boardSystem = null;
+        private void OnDisable() => BoardSystem = null;
 
         private void OnDrawGizmos()
         {
-            if (_boardSystem == null || _config == null) return;
+            if (BoardSystem == null || _config == null) return;
 
             Gizmos.color = _cellColor;
 
-            foreach (Vector2Int gridPosition in _boardSystem.GetAllCells())
+            foreach (Vector2Int gridPosition in BoardSystem.GetCells().Keys)
             {
-                Vector3[] corners = _boardSystem.GetCellCorners(gridPosition);
+                Vector3[] corners = BoardSystem.GetCellCorners(gridPosition);
 
                 for (int i = 0; i < corners.Length; i++)
                 {
@@ -42,7 +42,7 @@ namespace Gameplay.Core.Board.Debugger
                 
                 if (_isDrawCellPosition)
                 {
-                    Vector3 center = _boardSystem.GridToWorld(gridPosition);
+                    Vector3 center = BoardSystem.CellToWorld(gridPosition);
                     Vector3 labelPos = transform.position + center + Vector3.up * 0.05f;
                     Handles.color = Color.white;
                     Handles.Label(labelPos, $"{gridPosition.x},{gridPosition.y}");
