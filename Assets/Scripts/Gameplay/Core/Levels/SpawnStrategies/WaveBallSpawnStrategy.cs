@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Gameplay.Core.Ball.Data;
-using Gameplay.Core.Ball.Utils;
-using Gameplay.Services.Randoms;
+using Gameplay.Core.Balls.Data;
+using Gameplay.Core.Balls.Utils;
+using Gameplay.Services.UnityRandom;
 using UnityEngine;
 
 namespace Gameplay.Core.Levels.SpawnStrategies

@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Infrastructure.States;
 using Infrastructure.States.GameStates;
+using UnityEngine;
 using Zenject;
 
 namespace Infrastructure.Bootstrapper
@@ -20,6 +21,8 @@ namespace Infrastructure.Bootstrapper
         public async void Initialize()
         {
             await InitializeServices();
+            
+            Application.targetFrameRate = 60;
             
             _stateMachine.Enter<GameplayState>();
         }

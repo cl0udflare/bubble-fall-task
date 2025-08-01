@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Gameplay.Core.Ball;
-using Gameplay.Core.Ball.Data;
-using Gameplay.Core.Ball.Factory;
+using Gameplay.Core.Balls;
+using Gameplay.Core.Balls.Data;
+using Gameplay.Core.Balls.Factory;
+using Gameplay.Core.Balls.StaticData;
+using Gameplay.Core.Grids;
+using Gameplay.Core.Grids.Data;
 using Gameplay.Core.Levels.SpawnStrategies;
-using Gameplay.Core.Ball.StaticData;
-using Gameplay.Core.Board;
-using Gameplay.Core.Board.Data;
-using Gameplay.Services.Randoms;
+using Gameplay.Services.UnityRandom;
 using Logging;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace Gameplay.Core.Levels.Builder
 
         private BallConfig _ballConfig;
         private IBallSpawnStrategy _spawnStrategy;
-        private IBoardSystem _boardSystem;
+        private GridSystem _gridSystem;
 
         public LevelBuilder(IBallFactory ballFactory, IRandomService randomService)
         {
@@ -27,24 +27,24 @@ namespace Gameplay.Core.Levels.Builder
             _randomService = randomService;
         }
 
-        public void Initialize(BallConfig ballConfig, IBoardSystem boardSystem)
+        public void Initialize(BallConfig ballConfig, GridSystem gridSystem)
         {
             _ballConfig = ballConfig;
-            _boardSystem = boardSystem;
+            _gridSystem = gridSystem;
             
             _spawnStrategy = new WaveBallSpawnStrategy(_randomService);
         }
 
         public void Build()
         {
-            IEnumerable<Vector2Int> layout = _boardSystem.GetCells().Keys;
+            IEnumerable<Vector2Int> layout = _gridSystem.GetCells().Keys;
             List<BallData> ballsToSpawn = _spawnStrategy.GenerateBalls(layout);
 
             foreach (BallData ballData in ballsToSpawn)
             {
-                if (_boardSystem.TryAddCellData(ballData.GridPosition, out BoardData boardData))
+                if (_gridSystem.TryAddCellData(ballData.GridPosition, out GridData boardData))
                 {
-                    Vector3 worldPosition = _boardSystem.CellToWorld(ballData.GridPosition);
+                    Vector3 worldPosition = _gridSystem.CellToWorld(ballData.GridPosition);
                     BallView ball = _ballFactory.CreateBall(_ballConfig, worldPosition, ballData.Color);
                     
                     boardData.View = ball;

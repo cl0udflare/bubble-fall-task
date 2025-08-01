@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Gameplay.Core.Ball.Data;
+using Gameplay.Core.Balls.Data;
 using UnityEngine;
 
 namespace Gameplay.Core.Levels.SpawnStrategies
