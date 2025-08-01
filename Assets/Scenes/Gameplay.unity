@@ -554,7 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gridSystem: {fileID: 1144332405}
-  _runOnEnable: 1
+  _runOnEnable: 0
   _isDrawCellPosition: 0
   _cellColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!114 &1144332405

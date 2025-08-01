@@ -12,7 +12,6 @@ namespace Gameplay.Core.Grids
         [SerializeField] private GridSystem _gridSystem;
 
         [Header("Settings")]
-        [SerializeField] private bool _runOnEnable;
         [SerializeField] private bool _isDrawCellPosition;
         [SerializeField] private Color _cellColor = Color.cyan;
 
@@ -23,7 +22,8 @@ namespace Gameplay.Core.Grids
 
         private void OnEnable()
         {
-            if (_runOnEnable)
+            if (Application.isPlaying) return;
+            if (_gridSystem != null)
                 _gridSystem.Initialize();
         }
 
