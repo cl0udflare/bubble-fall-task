@@ -1,5 +1,4 @@
 ﻿using Gameplay.Core.Grids;
-using Gameplay.Core.Levels.StaticData;
 using Gameplay.Services.StaticData;
 using Infrastructure.Services.Loading;
 using Infrastructure.Signals;
@@ -34,26 +33,26 @@ namespace Infrastructure.States.GameStates
         public void Exit()
         {
         }
-        
+
         private void OnSceneReady(SceneReadySignal signal)
         {
             _signalBus.Unsubscribe<SceneReadySignal>(OnSceneReady);
 
             _gridSystem = signal.GetService<GridSystem>();
 
-            LoadCoreDependencies();
+            OnLoaded();
         }
 
-        private void LoadCoreDependencies()
+        private void OnLoaded()
         {
             InitializeGameplay();
         }
 
         private void InitializeGameplay()
         {
-            LevelConfig levelConfig = _staticData.LevelConfig;
-            
             _gridSystem.Initialize();
+            _gridSystem.GridMover.StartMove();
+            
             // CreateLevelBuilder();
 
             // Tester();

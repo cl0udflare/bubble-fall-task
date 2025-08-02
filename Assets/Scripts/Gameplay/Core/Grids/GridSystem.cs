@@ -17,6 +17,7 @@ namespace Gameplay.Core.Grids
         private IGridStrategy _grid;
 
         public GridConfig Config => _config;
+        public GridMover GridMover => _gridMover;
         public bool IsInitialized => _grid != null;
 
         public void OnDestroy()

@@ -14,6 +14,7 @@ namespace Gameplay.Core.Grids
         private float _cellSize;
         private float _timeElapsed;
         private float _distanceAccumulator;
+        private bool _isStart;
 
         public event Action<int> OnCellShifted;
         
@@ -23,6 +24,15 @@ namespace Gameplay.Core.Grids
 
         private void OnDestroy() => 
             _setup = null;
+
+        private void Update()
+        {
+            if (_setup == null) return;
+            if (!_isStart) return;
+            
+            float delta = ApplyMovement();
+            CheckCellShift(delta);
+        }
 
         public void Initialize(GridMovementSetup setup, float cellSize)
         {
@@ -40,14 +50,9 @@ namespace Gameplay.Core.Grids
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
-
-        private void Update()
-        {
-            if (_setup == null) return;
-
-            float delta = ApplyMovement();
-            CheckCellShift(delta);
-        }
+        
+        public void StartMove() => _isStart = true;
+        public void StopMove() => _isStart = false;
 
         private float ApplyMovement()
         {
