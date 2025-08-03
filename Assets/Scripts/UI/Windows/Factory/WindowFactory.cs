@@ -1,10 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
 using Gameplay.Services.StaticData;
-using UI.Window.StaticData;
+using UI.Windows.StaticData;
 using UnityEngine;
 using Zenject;
 
-namespace UI.Window.Factory
+namespace UI.Windows.Factory
 {
     public class WindowFactory : IWindowFactory
     {

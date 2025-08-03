@@ -15,7 +15,7 @@ namespace Progress.Installers
         
         private void BindServices()
         {
-            Container.Bind<IProgressService>().To<ProgressService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ProgressService>().AsSingle();
             Container.BindInterfacesAndSelfTo<ProgressStorage>().AsSingle();
         }
     }

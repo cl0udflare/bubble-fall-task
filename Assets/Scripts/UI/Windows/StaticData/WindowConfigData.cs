@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UI.Window.StaticData
+namespace UI.Windows.StaticData
 {
     [Serializable]
     public class WindowConfigData

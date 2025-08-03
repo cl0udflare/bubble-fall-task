@@ -11,14 +11,14 @@ namespace Infrastructure.Installers
     {
         public override void InstallBindings()
         {
-            UIInstaller.Install(Container);
             InfrastructureInstaller.Install(Container);
             ProgressInstaller.Install(Container);
+            UIInstaller.Install(Container);
             GameplayInstaller.Install(Container);
-            StateMachineInstaller.Install(Container);
             MediatorInstaller.Install(Container);
+            StateMachineInstaller.Install(Container);
 
-            DebugLogger.LogMessage(message: $"All Installed", sender: this);
+            DebugLogger.LogMessage(message: $"Installed", sender: this);
 
             Container.BindInterfacesAndSelfTo<GameBootstrapper>().AsSingle().NonLazy(); // Bootstrap
         }

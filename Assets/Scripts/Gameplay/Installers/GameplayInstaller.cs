@@ -24,16 +24,16 @@ namespace Gameplay.Installers
         private void BindServices()
         {
             Container.BindInterfacesAndSelfTo<StaticDataService>().AsSingle();
-            Container.Bind<ISystemFactory>().To<SystemFactory>().AsSingle();
-            Container.Bind<IRandomService>().To<RandomService>().AsSingle();
-            Container.Bind<ITimeService>().To<UnityTimeService>().AsSingle();
-            Container.BindInterfacesTo<InputService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SystemFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RandomService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<UnityTimeService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<InputService>().AsSingle();
         }
 
         private void BindFactories()
         {
-            Container.Bind<IObjectPoolFactory>().To<ObjectPoolFactory>().AsSingle();
-            Container.Bind<IBallFactory>().To<BallFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ObjectPoolFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<BallFactory>().AsSingle();
         }
     }
 }

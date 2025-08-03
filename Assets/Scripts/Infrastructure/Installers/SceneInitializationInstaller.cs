@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using Infrastructure.Signals;
+using Infrastructure.Services.SceneLocator;
 using Logging;
 using UnityEngine;
 using Zenject;
@@ -10,21 +9,22 @@ namespace Infrastructure.Installers
     public class SceneInitializationInstaller : MonoInstaller
     {
         [SerializeField] private List<MonoBehaviour> _sceneServices;
+        
+        private ISceneServiceLocator _serviceLocator;
+
+        [Inject]
+        private void Construct(ISceneServiceLocator serviceLocator) => 
+            _serviceLocator = serviceLocator;
 
         public override void InstallBindings()
         {
-            Dictionary<Type, object> servicesMap = new();
+            _serviceLocator.Clear();
 
             foreach (MonoBehaviour service in _sceneServices)
             {
-                Type type = service.GetType();
-                Container.BindInterfacesAndSelfTo(type).FromInstance(service).AsSingle();
-                servicesMap[type] = service;
+                Container.BindInterfacesAndSelfTo(service.GetType()).FromInstance(service).AsSingle();
+                _serviceLocator.Register(service);
             }
-
-            Container.BindInstance(servicesMap).AsSingle();
-            Container.BindInterfacesAndSelfTo<SceneNotifier>().AsSingle()
-                .WithArguments(servicesMap);
             
             DebugLogger.LogMessage(message: $"Installed", sender: this);
         }

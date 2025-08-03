@@ -1,31 +1,27 @@
-﻿using System.Threading;
-using Cysharp.Threading.Tasks;
+﻿using UI.Curtain;
 using UnityEngine;
 
-namespace UI.Curtain.Services
+namespace UI.Services
 {
     public class CurtainService : MonoBehaviour, ICurtainService
     {
         [SerializeField] private CurtainView _view;
-        
-        public async UniTask InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            Show();
-            await UniTask.CompletedTask;
-        }
+
+        private float _from;
+        private float _to;
 
         public void Show(string text = "Loading...")
         {
+            SetProgress01(0);
             _view?.SetText(text);
-            _view?.SetProgress(0);
             _view?.SetVisible(true);
         }
 
         public void Hide() => 
             _view?.SetVisible(false);
 
-        public void SetProgress(float value) => 
-            _view?.SetProgress(value);
+        public void SetProgress01(float value) => 
+            _view?.SetProgress(Mathf.Clamp01(value));
 
         public void SetText(string text) => 
             _view?.SetText(text);

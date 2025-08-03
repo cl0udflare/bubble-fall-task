@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace UI.Window.StaticData
+namespace UI.Windows.StaticData
 {
     [CreateAssetMenu(fileName = "WindowConfig", menuName = "Bubble Fall/Window")]
     public class WindowConfig : ScriptableObject

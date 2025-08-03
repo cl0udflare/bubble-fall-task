@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace UI.Window.Factory
+namespace UI.Windows.Factory
 {
     public interface IWindowFactory
     {

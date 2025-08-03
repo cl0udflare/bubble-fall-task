@@ -1,78 +1,42 @@
-﻿using Gameplay.Core.Grids;
-using Gameplay.Services.StaticData;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Core.Grids;
 using Infrastructure.Services.Loading;
-using Infrastructure.Signals;
-using Zenject;
+using Infrastructure.Services.SceneLocator;
+using Infrastructure.Services.SceneTransition;
 
 namespace Infrastructure.States.GameStates
 {
     public class GameplayState : IState
     {
-        private readonly ISceneLoaderService _sceneLoaderService;
-        private readonly IStaticDataService _staticData;
-        private readonly SignalBus _signalBus;
-        
+        private readonly ISceneTransitionService _sceneTransition;
+        private readonly ISceneServiceLocator _serviceLocator;
+
         private GridSystem _gridSystem;
 
         public GameplayState(
-            ISceneLoaderService sceneLoaderService, 
-            IStaticDataService staticData, 
-            SignalBus signalBus)
+            ISceneTransitionService sceneTransition, 
+            ISceneServiceLocator serviceLocator)
         {
-            _sceneLoaderService = sceneLoaderService;
-            _staticData = staticData;
-            _signalBus = signalBus;
+            _sceneTransition = sceneTransition;
+            _serviceLocator = serviceLocator;
         }
 
         public async void Enter()
         {
-            _signalBus.Subscribe<SceneReadySignal>(OnSceneReady);
-            await _sceneLoaderService.LoadSceneAsync(SceneType.Gameplay);
+            await _sceneTransition.TransitionAsync(SceneType.Gameplay, InitializeGameplayAsync);
         }
 
         public void Exit()
         {
         }
 
-        private void OnSceneReady(SceneReadySignal signal)
+        private async UniTask InitializeGameplayAsync()
         {
-            _signalBus.Unsubscribe<SceneReadySignal>(OnSceneReady);
-
-            _gridSystem = signal.GetService<GridSystem>();
-
-            OnLoaded();
-        }
-
-        private void OnLoaded()
-        {
-            InitializeGameplay();
-        }
-
-        private void InitializeGameplay()
-        {
+            _gridSystem = _serviceLocator.Get<GridSystem>();
             _gridSystem.Initialize();
             _gridSystem.GridMover.StartMove();
             
-            // CreateLevelBuilder();
-
-            // Tester();
+            await UniTask.CompletedTask;
         }
-
-        // private void Tester()
-        // {
-        //     BallRemoverTester BallRemoverTester = Object.FindFirstObjectByType<BallRemoverTester>();
-        //     BallRemoverTester.CreatePhysicsSystem(_boardSystem);
-        // } 
-
-        // private ILevelBuilder CreateLevelBuilder()
-        // {
-        //     BallConfig ballConfig = _staticData.BallConfig;
-        //     ILevelBuilder builder = _systemFactory.Create<LevelBuilder>();
-        //    
-        //     builder.Initialize(ballConfig, _boardSystem);
-        //     builder.Build();
-        //     
-        //     return builder;
-        // }
     }
 }

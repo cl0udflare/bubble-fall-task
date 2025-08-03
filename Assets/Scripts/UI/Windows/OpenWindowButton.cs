@@ -1,9 +1,9 @@
-﻿using UI.Window.Factory;
+﻿using UI.Windows.Factory;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Window
+namespace UI.Windows
 {
     public class OpenWindowButton : MonoBehaviour
     {

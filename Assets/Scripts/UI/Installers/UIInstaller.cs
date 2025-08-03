@@ -1,6 +1,6 @@
 using Logging;
-using UI.Curtain.Services;
-using UI.Window.Factory;
+using UI.Services;
+using UI.Windows.Factory;
 using Zenject;
 
 namespace UI.Installers
@@ -22,7 +22,7 @@ namespace UI.Installers
         
         private void BindFactories()
         {
-            Container.Bind<IWindowFactory>().To<WindowFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<WindowFactory>().AsSingle();
         }
     }
 }

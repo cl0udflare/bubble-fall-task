@@ -1,6 +1,7 @@
 using Infrastructure.Services.AssetManagement;
 using Infrastructure.Services.Loading;
-using Infrastructure.Signals;
+using Infrastructure.Services.SceneLocator;
+using Infrastructure.Services.SceneTransition;
 using Logging;
 using Zenject;
 
@@ -11,7 +12,6 @@ namespace Infrastructure.Installers
         public override void InstallBindings()
         {
             BindServices();
-            BindSignal();
             
             DebugLogger.LogMessage(message: $"Installed", sender: this);
         }
@@ -19,15 +19,9 @@ namespace Infrastructure.Installers
         private void BindServices()
         {
             Container.BindInterfacesAndSelfTo<LoaderService>().AsSingle();
-            Container.Bind<ISceneLoaderService>().To<SceneLoaderService>().AsSingle();
-        }
-        
-        private void BindSignal()
-        {
-            SignalBusInstaller.Install(Container);
-            Container.DeclareSignal<SceneReadySignal>()
-                .OptionalSubscriber()
-                .RunAsync();
+            Container.BindInterfacesAndSelfTo<SceneLoaderService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SceneTransitionService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SceneServiceLocator>().AsSingle();
         }
     }
 }

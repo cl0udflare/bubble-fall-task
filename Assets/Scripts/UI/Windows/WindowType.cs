@@ -1,4 +1,4 @@
-﻿namespace UI.Window
+﻿namespace UI.Windows
 {
     public enum WindowType
     {

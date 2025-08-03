@@ -6,8 +6,8 @@ using Gameplay.Core.Balls.StaticData;
 using Gameplay.Core.Levels.StaticData;
 using Infrastructure.Services.AssetManagement;
 using Logging;
-using UI.Window;
-using UI.Window.StaticData;
+using UI.Windows;
+using UI.Windows.StaticData;
 
 namespace Gameplay.Services.StaticData
 {
@@ -30,6 +30,7 @@ namespace Gameplay.Services.StaticData
         public async UniTask InitializeAsync(CancellationToken cancellationToken = default)
         {
             await LoadAll();
+            
             DebugLogger.LogMessage(message: $"Loaded", sender: this);
         }
 

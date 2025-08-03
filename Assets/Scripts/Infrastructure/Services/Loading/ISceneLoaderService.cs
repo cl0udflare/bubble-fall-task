@@ -6,6 +6,6 @@ namespace Infrastructure.Services.Loading
 {
     public interface ISceneLoaderService
     {
-        UniTask LoadSceneAsync(SceneType sceneType, Func<UniTask> postLoadLogic = null, CancellationToken cancellationToken = default);
+        UniTask LoadSceneAsync(SceneType sceneType, Action<float> onProgress, CancellationToken token = default);
     }
 }

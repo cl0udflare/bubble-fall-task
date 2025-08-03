@@ -2,7 +2,7 @@
 {
     public enum SceneType
     {
-        None = 0,
+        Init = 0,
         Gameplay = 1
     }
 }

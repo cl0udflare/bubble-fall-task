@@ -16,12 +16,12 @@ namespace Progress.Services
         public ProgressStorage(IProgressService progressService) => 
             _progressService = progressService;
 
-        public UniTask InitializeAsync(CancellationToken cancellationToken = default)
+        public async UniTask InitializeAsync(CancellationToken cancellationToken = default)
         {
             Load();
-            
+
+            await UniTask.CompletedTask;
             DebugLogger.LogMessage(message: $"Loaded", sender: this);
-            return UniTask.CompletedTask;
         }
         
         public void Save()

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Window
+namespace UI.Windows
 {
     public class WindowBase : MonoBehaviour
     {
