@@ -6,6 +6,8 @@ namespace Gameplay.Core.Levels.SpawnStrategies
 {
     public interface IBallSpawnStrategy
     {
-        List<BallData> GenerateBalls(IEnumerable<Vector2Int> gridLayout);
+        List<BallData> GenerateBalls(Dictionary<Vector2Int, Vector3> cellsPositions);
+        BallColor GetBallColorForPosition(Vector3 cellWorldPosition);
+        void ShiftPattern(int rowsAdded);
     }
 }

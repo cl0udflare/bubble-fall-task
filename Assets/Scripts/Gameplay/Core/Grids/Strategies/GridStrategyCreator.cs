@@ -16,7 +16,7 @@ namespace Gameplay.Core.Grids.Strategies
                 _ => throw new ArgumentOutOfRangeException()
             };
             
-            _grid.GenerateCells();
+            _grid.GenerateInitCells();
             
             return _grid;
         }

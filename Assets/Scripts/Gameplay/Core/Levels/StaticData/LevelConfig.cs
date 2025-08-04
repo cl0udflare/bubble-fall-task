@@ -1,19 +1,18 @@
 using Gameplay.Core.Grids.StaticData;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gameplay.Core.Levels.StaticData
 {
     [CreateAssetMenu(fileName = "LevelConfig", menuName = "Bubble Fall/Level")]
     public class LevelConfig : ScriptableObject
     {
-        [FormerlySerializedAs("_boardConfig")]
         [Header("Board Settings")]
-        [SerializeField] private GridConfig gridConfig;
-        [Space]
-        [SerializeField] private int _minMatchGroupSize = 3; 
+        [SerializeField] private GridConfig _gridConfig;
+        [SerializeField, Space] private int _minMatchGroupSize = 3; 
+        [SerializeField, Space] private BallSpawnSetup _spawnSetup; 
         
-        public GridConfig GridConfig => gridConfig;
+        public GridConfig GridConfig => _gridConfig;
         public int MinMatchGroupSize => _minMatchGroupSize;
+        public BallSpawnSetup SpawnSetup => _spawnSetup;
     }
 }

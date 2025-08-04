@@ -23,13 +23,13 @@ namespace Gameplay.Core.Balls.BallPhysics.Utils
             HashSet<Vector2Int> connected = new HashSet<Vector2Int>();
             Stack<Vector2Int> stack = new Stack<Vector2Int>();
 
-            foreach (Vector2Int pos in GetTopRowPositions(columns))
+            foreach (Vector2Int position in GetTopRowPositions(columns))
             {
-                GridData cell = grid.GetCell(pos);
+                GridData cell = grid.GetCell(position);
                 if (cell is { IsOccupied: true })
                 {
-                    stack.Push(pos);
-                    connected.Add(pos);
+                    stack.Push(position);
+                    connected.Add(position);
                 }
             }
 

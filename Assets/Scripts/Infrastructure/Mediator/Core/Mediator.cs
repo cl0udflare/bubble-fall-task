@@ -19,7 +19,7 @@ namespace Infrastructure.Mediator.Core
         public Mediator(DiContainer container) =>
             _container = container;
         
-        public UniTask InitializeAsync(CancellationToken cancellationToken = default)
+        public UniTask InitializeAsync(CancellationToken token = default)
         {
             InitializeHandlers(_container);
             InitializeEventListeners(_container);

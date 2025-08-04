@@ -5,6 +5,6 @@ namespace Infrastructure.Bootstrapper
 {
     public interface IInitializableAsync
     {
-        UniTask InitializeAsync(CancellationToken cancellationToken = default);
+        UniTask InitializeAsync(CancellationToken token = default);
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Gameplay.Core.Balls;
 using Gameplay.Core.Grids.Data;
 using Gameplay.Core.Grids.Utils;
@@ -19,6 +21,8 @@ namespace Gameplay.Core.Grids.Strategies
         
         public Dictionary<Vector2Int, GridData> Cells => _cells;
         public int CurrentRowCount => _currentMaxRow - _currentMinRow + 1;
+        
+        public event Action<List<Vector2Int>> OnCellAdded;
 
         public HexRectangularGridStrategy(int rows, int cols, float cellSize)
         {
@@ -30,13 +34,17 @@ namespace Gameplay.Core.Grids.Strategies
             _currentMinRow = 0;
         }
 
-        public void GenerateCells()
+        public void GenerateInitCells()
         {
+            Dispose();
+            
             foreach (Vector2Int gridPosition in AllCells())
             {
                 GridData gridData = GetGridData();
                 _cells.Add(gridPosition, gridData);
             }
+            
+            OnCellAdded?.Invoke(_cells.Keys.ToList());
         }
 
         public bool TryAddCellData(Vector2Int cellPosition, out GridData cellData)
@@ -64,6 +72,9 @@ namespace Gameplay.Core.Grids.Strategies
             cellData.Dispose();
             return true;
         }
+        
+        public GridData GetCell(Vector2Int gridPosition)
+            => _cells.GetValueOrDefault(gridPosition);
 
         public Dictionary<Vector2Int, GridData> GetOccupiedCells()
         {
@@ -98,13 +109,17 @@ namespace Gameplay.Core.Grids.Strategies
         
         public void AddRowOnTop()
         {
+            List<Vector2Int> cells = new List<Vector2Int>();
             _currentMinRow--;
 
             for (int col = 0; col < _cols; col++)
             {
                 Vector2Int gridPos = HexGridMath.OffsetToAxial(col, _currentMinRow);
                 _cells[gridPos] = GetGridData();
+                cells.Add(gridPos);
             }
+            
+            OnCellAdded?.Invoke(cells);
         }
         
         public void RemoveRowOnBottom()

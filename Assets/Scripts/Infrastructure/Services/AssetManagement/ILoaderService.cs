@@ -7,6 +7,6 @@ namespace Infrastructure.Services.AssetManagement
 {
     public interface ILoaderService : IInitializableAsync
     {
-        UniTask<T> LoadAsset<T>(string path, CancellationToken cancellationToken = default) where T : Object;
+        UniTask<T> LoadAssetAsync<T>(string path, CancellationToken token = default) where T : Object;
     }
 }

@@ -6,6 +6,7 @@ namespace Gameplay.Core.Balls.Factory
 {
     public interface IBallFactory
     {
-        BallView CreateBall(BallConfig config, Vector3 position, BallColor color);
+        BallView Create(BallConfig config, Vector3 position, BallColor color);
+        void SetRoot(Transform root);
     }
 }

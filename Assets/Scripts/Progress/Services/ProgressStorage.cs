@@ -16,7 +16,7 @@ namespace Progress.Services
         public ProgressStorage(IProgressService progressService) => 
             _progressService = progressService;
 
-        public async UniTask InitializeAsync(CancellationToken cancellationToken = default)
+        public async UniTask InitializeAsync(CancellationToken token = default)
         {
             Load();
 

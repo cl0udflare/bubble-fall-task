@@ -1,65 +1,81 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Gameplay.Core.Balls;
 using Gameplay.Core.Balls.Data;
 using Gameplay.Core.Grids.Data;
 using Gameplay.Core.Grids.StaticData;
 using Gameplay.Core.Grids.Strategies;
+using Logging;
 using UnityEngine;
 
 namespace Gameplay.Core.Grids
 {
-    [RequireComponent(typeof(GridMover))]
     public class GridSystem : MonoBehaviour
     {
-        [SerializeField] private GridConfig _config;
-        [SerializeField] private GridMover _gridMover;
-
+        private GridConfig _config;
         private IGridStrategy _grid;
 
         public GridConfig Config => _config;
-        public GridMover GridMover => _gridMover;
-        public bool IsInitialized => _grid != null;
+        private bool _isInitialized => _grid != null;
 
-        public void OnDestroy()
+        public event Action<List<Vector2Int>> OnCellAdded
         {
-            _grid?.Dispose();
-            _gridMover.OnCellShifted -= AddNewRows;
+            add { if (IsInitialized()) _grid.OnCellAdded += value; }
+            remove { if (IsInitialized()) _grid.OnCellAdded -= value; }
         }
 
-        public void Initialize()
+        private void OnDestroy() =>
+            _grid?.Dispose();
+
+        public void Initialize(GridConfig config)
         {
-            if (IsInitialized) return;
-            
+            if (IsInitialized()) return;
+
+            _config = config;
+
             GridStrategyCreator strategyCreator = new GridStrategyCreator();
             _grid = strategyCreator.CreateStrategy(_config.GridSetup);
-
-            _gridMover.OnCellShifted += AddNewRows;
-            _gridMover.Initialize(_config.MovementSetup, _config.GridSetup.CellSize);
         }
 
-        public bool TryAddCellData(Vector2Int cellPosition, out GridData cellData)
-            => _grid.TryAddCellData(cellPosition, out cellData);
+        public Dictionary<Vector2Int, GridData> GetCells() => _grid.Cells;
 
-        public bool TryRemoveCellData(Vector2Int gridPosition, out BallView ballView)
-            => _grid.TryRemoveCellData(gridPosition, out ballView);
+        public bool TryAddCellData(Vector2Int cellPosition, out GridData cellData) =>
+            _grid.TryAddCellData(cellPosition, out cellData);
 
-        public GridData GetCell(Vector2Int gridPosition)
-            => _grid.Cells.GetValueOrDefault(gridPosition);
+        public bool TryRemoveCellData(Vector2Int gridPosition, out BallView ballView) =>
+            _grid.TryRemoveCellData(gridPosition, out ballView);
 
-        public Dictionary<Vector2Int, GridData> GetCells()
-            => _grid.Cells;
+        public GridData GetCell(Vector2Int gridPosition) =>
+            _grid.GetCell(gridPosition);
 
-        public Dictionary<Vector2Int, GridData> GetOccupiedCells()
-            => _grid.GetOccupiedCells();
+        public Dictionary<Vector2Int, GridData> GetOccupiedCells() =>
+            _grid.GetOccupiedCells();
 
-        public Vector3 CellToWorld(Vector2Int gridPosition)
-            => _grid.CellToWorld(gridPosition);
+        public Vector3 CellToWorld(Vector2Int gridPosition) =>
+            transform.position + _grid.CellToWorld(gridPosition);
 
         public Vector3[] GetCellCorners(Vector2Int gridPosition)
-            => _grid.GetCellCorners(gridPosition);
+        {
+            Vector3[] localCorners = _grid.GetCellCorners(gridPosition);
+            for (int i = 0; i < localCorners.Length; i++)
+                localCorners[i] += transform.position;
+
+            return localCorners;
+        }
 
         public IEnumerable<Vector2Int> GetNeighbors(Vector2Int position) =>
             _grid.GetNeighbors(position);
+
+        public void AddNewRows(int count)
+        {
+            if (_grid == null) return;
+
+            for (int i = 0; i < count; i++)
+            {
+                _grid.AddRowOnTop();
+                _grid.RemoveRowOnBottom();
+            }
+        }
 
         public List<Vector2Int> FindMatchingGroup(Vector2Int start, BallColor color)
         {
@@ -74,13 +90,13 @@ namespace Gameplay.Core.Grids
                 if (!visited.Add(position))
                     continue;
 
-                GridData cell = GetCell(position);
+                GridData cell = _grid.GetCell(position);
                 if (cell is not { IsOccupied: true } || cell.Color != color)
                     continue;
 
                 group.Add(position);
 
-                foreach (Vector2Int neighbor in GetNeighbors(position))
+                foreach (Vector2Int neighbor in _grid.GetNeighbors(position))
                 {
                     if (!visited.Contains(neighbor))
                         stack.Push(neighbor);
@@ -90,16 +106,12 @@ namespace Gameplay.Core.Grids
             return group;
         }
 
-        private void AddNewRows(int count)
+        public bool IsInitialized()
         {
-            if (_grid == null) return;
+            if (_isInitialized) return true;
             
-            for (int i = 0; i < count; i++)
-            {
-                _grid.AddRowOnTop();
-                _grid.RemoveRowOnBottom();
-            }
+            DebugLogger.LogWarning($"{nameof(GridSystem)} isn't initialized", this);
+            return false;
         }
     }
 }
-

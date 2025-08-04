@@ -18,7 +18,7 @@ namespace Infrastructure.States
         public GameStateMachine(DiContainer container) =>
             _container = container;
 
-        public UniTask InitializeAsync(CancellationToken cancellationToken = default)
+        public UniTask InitializeAsync(CancellationToken token = default)
         {
             RegisterStates();
 

@@ -1,6 +1,5 @@
 using Infrastructure.Services.AssetManagement;
 using Infrastructure.Services.Loading;
-using Infrastructure.Services.SceneLocator;
 using Infrastructure.Services.SceneTransition;
 using Logging;
 using Zenject;
@@ -21,7 +20,6 @@ namespace Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<LoaderService>().AsSingle();
             Container.BindInterfacesAndSelfTo<SceneLoaderService>().AsSingle();
             Container.BindInterfacesAndSelfTo<SceneTransitionService>().AsSingle();
-            Container.BindInterfacesAndSelfTo<SceneServiceLocator>().AsSingle();
         }
     }
 }

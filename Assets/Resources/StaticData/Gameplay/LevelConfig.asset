@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b1e8208e6a40c1a0ce058084c59f7d, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
-  _boardConfig: {fileID: 11400000, guid: 1020a0bed1821bd40b71ad3ffe26e4ad, type: 2}
+  _gridConfig: {fileID: 11400000, guid: 1020a0bed1821bd40b71ad3ffe26e4ad, type: 2}
+  _minMatchGroupSize: 3
+  _spawnSetup:
+    _spawnType: 2

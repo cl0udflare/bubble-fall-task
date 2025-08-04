@@ -2,22 +2,17 @@
 using Gameplay.Services.StaticData;
 using UI.Windows.StaticData;
 using UnityEngine;
-using Zenject;
 
 namespace UI.Windows.Factory
 {
     public class WindowFactory : IWindowFactory
     {
         private readonly IStaticDataService _staticDataService;
-        private readonly DiContainer _container;
         
         private Transform _windowRoot;
 
-        public WindowFactory(IStaticDataService staticDataService, DiContainer container)
-        {
+        public WindowFactory(IStaticDataService staticDataService) => 
             _staticDataService = staticDataService;
-            _container = container;
-        }
 
         public async UniTask<WindowBase> CreateWindowByType(WindowType type) => 
             await CreateWindow(type);
@@ -28,11 +23,10 @@ namespace UI.Windows.Factory
         private async UniTask<WindowBase> CreateWindow(WindowType type)
         {
             WindowConfigData windowData = _staticDataService.GetWindow(type);
+
+            WindowBase[] windows = await Object.InstantiateAsync(windowData.Prefab, parent: _windowRoot);
+            WindowBase window = windows[0];
             
-            WindowBase[] instance = await Object.InstantiateAsync(windowData.Prefab, _windowRoot).ToUniTask();
-            WindowBase window = instance[0];
-            
-            _container.InjectGameObject(window.gameObject);
             return window;
         }
     }

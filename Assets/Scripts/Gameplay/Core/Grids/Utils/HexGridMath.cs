@@ -33,17 +33,17 @@ namespace Gameplay.Core.Grids.Utils
                     center.z + radius * Mathf.Sin(angleRad)
                 );
             }
+
             return corners;
         }
-        
+
         /// <summary>
         /// Конвертує зміщені координати сітки (offset: col, row) у axial-координати (q, r).
         /// </summary>
         public static Vector2Int OffsetToAxial(int col, int row)
         {
-            int q = col - (row - (row & 1)) / 2;
-            int r = row;
-            return new Vector2Int(q, r);
+            int q = col - (row - (row & 1)) / 2; 
+            return new Vector2Int(q, row);
         }
     }
 }

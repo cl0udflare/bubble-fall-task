@@ -21,9 +21,9 @@ namespace Gameplay.Core.Balls
 
         public void SetColor(BallColor color)
         {
-            _renderer.GetPropertyBlock(_propertyBlock);
-            _propertyBlock.SetColor(ColorProperty, BallColorUtils.ToColor(color));
-            _renderer.SetPropertyBlock(_propertyBlock);
+            _renderer?.GetPropertyBlock(_propertyBlock);
+            _propertyBlock?.SetColor(ColorProperty, BallColorUtils.ToColor(color));
+            _renderer?.SetPropertyBlock(_propertyBlock);
         }
     }
 }

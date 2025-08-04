@@ -10,12 +10,11 @@ namespace Gameplay.Core.Grids
     public class GridDebugger : MonoBehaviour
     {
         [SerializeField] private GridSystem _gridSystem;
+        [SerializeField] private GridConfig _config;
 
         [Header("Settings")]
         [SerializeField] private bool _isDrawCellPosition;
         [SerializeField] private Color _cellColor = Color.cyan;
-
-        private GridConfig _config => _gridSystem.Config;
 
         private void OnValidate() => 
             _gridSystem = GetComponent<GridSystem>();
@@ -24,12 +23,12 @@ namespace Gameplay.Core.Grids
         {
             if (Application.isPlaying) return;
             if (_gridSystem != null)
-                _gridSystem.Initialize();
+                _gridSystem.Initialize(_config);
         }
 
         private void OnDrawGizmos()
         {
-            if (!_gridSystem.IsInitialized) return;
+            if (!_gridSystem.IsInitialized()) return;
             if (_gridSystem == null || _config == null) return;
 
             Gizmos.color = _cellColor;
@@ -47,8 +46,8 @@ namespace Gameplay.Core.Grids
 
             for (int i = 0; i < corners.Length; i++)
             {
-                Vector3 start = transform.position + corners[i];
-                Vector3 end = transform.position + corners[(i + 1) % corners.Length];
+                Vector3 start = corners[i];
+                Vector3 end = corners[(i + 1) % corners.Length];
                 Gizmos.DrawLine(start, end);
             }
         }
@@ -58,7 +57,7 @@ namespace Gameplay.Core.Grids
             if (_isDrawCellPosition)
             {
                 Vector3 center = _gridSystem.CellToWorld(gridPosition);
-                Vector3 labelPos = transform.position + center + Vector3.up * 0.05f;
+                Vector3 labelPos = center + Vector3.up * 0.05f;
                 Handles.color = Color.white;
                 Handles.Label(labelPos, $"{gridPosition.x},{gridPosition.y}");
             }

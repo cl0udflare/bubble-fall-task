@@ -27,7 +27,7 @@ namespace Gameplay.Services.StaticData
         public StaticDataService(ILoaderService loaderService) => 
             _loaderService = loaderService;
 
-        public async UniTask InitializeAsync(CancellationToken cancellationToken = default)
+        public async UniTask InitializeAsync(CancellationToken token = default)
         {
             await LoadAll();
             
@@ -45,14 +45,14 @@ namespace Gameplay.Services.StaticData
 
         private async UniTask InitializeWindowConfig()
         {
-            WindowConfig windowConfig = await _loaderService.LoadAsset<WindowConfig>(WINDOW_PATH);
+            WindowConfig windowConfig = await _loaderService.LoadAssetAsync<WindowConfig>(WINDOW_PATH);
             _windowConfigs = windowConfig.Windows.ToDictionary(w => w.Type, w => w);
         }
 
         private async UniTask InitializeLevelConfig() => 
-            LevelConfig = await _loaderService.LoadAsset<LevelConfig>(LEVEL_PATH);
+            LevelConfig = await _loaderService.LoadAssetAsync<LevelConfig>(LEVEL_PATH);
         
         private async UniTask InitializeBallConfig() => 
-            BallConfig = await _loaderService.LoadAsset<BallConfig>(BALL_PATH);
+            BallConfig = await _loaderService.LoadAssetAsync<BallConfig>(BALL_PATH);
     }
 }

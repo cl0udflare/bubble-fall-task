@@ -6,18 +6,18 @@ namespace Gameplay.Core.Balls.Factory
 {
     public class BallFactory : IBallFactory
     {
-        private readonly Transform _parent;
+        private Transform _root;
 
-        public BallFactory()
+        public BallView Create(BallConfig config, Vector3 position, BallColor color)
         {
-            _parent = new GameObject("[Balls]").transform;
-        }
-
-        public BallView CreateBall(BallConfig config, Vector3 position, BallColor color)
-        {
-            BallView ball = Object.Instantiate(config.BallPrefab, position, Quaternion.identity, _parent);
+            BallView ball = Object.Instantiate(config.BallPrefab, position, Quaternion.identity, _root);
+            
             ball.SetColor(color);
+            
             return ball;
         }
+
+        public void SetRoot(Transform root) => 
+            _root = root;
     }
 }

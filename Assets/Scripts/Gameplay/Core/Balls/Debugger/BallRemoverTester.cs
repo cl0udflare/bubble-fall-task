@@ -16,7 +16,7 @@ namespace Gameplay.Core.Balls.Debugger
         private GridSystem _gridSystem;
 
         private Vector3 _lastRayHit = Vector3.zero;
-        private bool _hasHit = false;
+        private bool _hasHit;
 
         public void CreatePhysicsSystem(GridSystem gridSystem)
         {
